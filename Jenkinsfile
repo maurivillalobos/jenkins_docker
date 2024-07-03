@@ -5,12 +5,12 @@ pipeline {
     }
     agent any
     stages {
-        stage('Clone') {
+        stage('Clonar') {
             steps {
                 git branch: "main", url: 'https://github.com/josedom24/jenkins_docker.git'
             }
         }
-        stage('Build') {
+        stage('Construir') {
             steps {
                 script {
                     newApp = docker.build "$IMAGEN:$BUILD_NUMBER"
@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Testear') {
             steps {
                 script {
                     docker.image("$IMAGEN:$BUILD_NUMBER").inside('-u root') {
@@ -28,7 +28,7 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
+        stage('Desplegar') {
             steps {
                 script {
                     docker.withRegistry( '', USUARIO ) {
@@ -37,7 +37,7 @@ pipeline {
                 }
             }
         }
-        stage('Clean Up') {
+        stage('Borrar') {
             steps {
                 sh "docker rmi $IMAGEN:$BUILD_NUMBER"
                 }
